@@ -59,7 +59,7 @@ export default function Category() {
               key={index}
               className="w-[150px] shrink-0 duration-500"
             >
-              <img src={"http://localhost:5000/images/" + cat.image} alt="" />
+              <img src={`/images/${cat.image}`} alt="" />
             </div>
           );
         })}
