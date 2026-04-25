@@ -1,50 +1,58 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
-import data from "../../restaurantChains.json";
+import data from "../../db.json";
 
 export default function Category() {
   const [slide, setSlide] = useState(0);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]); // ✅ MUST
 
   useEffect(() => {
-    setCategories(data.restaurants);
+    setCategories(data?.categories || []);
   }, []);
 
   const nextSlide = () => {
-    if (categories.length - 8 === slide) return;
-    setSlide(slide + 3);
+    if (slide >= categories.length - 5) return;
+    setSlide(slide + 1);
   };
 
   const prevSlide = () => {
     if (slide === 0) return;
-    setSlide(slide - 3);
+    setSlide(slide - 1);
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto px-2">
-      <div className="flex my-3 items-center justify-between">
-        <div className="text-[25px] font-bold">What's on your mind?</div>
+    <div className="max-w-[1200px] mx-auto px-3">
+      
+      <div className="flex items-center justify-between my-4">
+        <h2 className="text-xl md:text-2xl font-bold">
+          What's on your mind?
+        </h2>
 
-        <div className="flex">
-          <div onClick={prevSlide} className="w-[30px] h-[30px] bg-gray-200 flex items-center justify-center rounded-full mx-2 cursor-pointer">
+        <div className="flex gap-2">
+          <button onClick={prevSlide} className="btn">
             <FaArrowLeft />
-          </div>
-          <div onClick={nextSlide} className="w-[30px] h-[30px] bg-gray-200 flex items-center justify-center rounded-full mx-2 cursor-pointer">
+          </button>
+          <button onClick={nextSlide} className="btn">
             <FaArrowRight />
-          </div>
+          </button>
         </div>
       </div>
 
-      <div className="flex overflow-hidden">
-        {categories.map((cat, index) => (
-          <div
-            key={index}
-            style={{ transform: `translateX(-${slide * 100}%)` }}
-            className="w-[150px] shrink-0 duration-500"
-          >
-            <img src={`/images/${cat.image}`} alt="" />
-          </div>
-        ))}
+      <div className="overflow-hidden">
+        <div
+          className="flex gap-4 transition-transform duration-500"
+          style={{ transform: `translateX(-${slide * 180}px)` }}
+        >
+          {categories.map((cat, index) => (
+            <div key={index} className="min-w-[160px]">
+              <img
+                src={`/images/${cat.image}`}
+                alt={cat.path}
+                className="w-full h-[190px] object-cover rounded-lg"
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
